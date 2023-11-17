@@ -1,4 +1,5 @@
 const express = require("express");
+
 const cors = require("cors");
 
 const app = express();
@@ -14,6 +15,16 @@ app.use(express.json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
 app.use(express.urlencoded({ extended: true }));
+
+const db = require("./app/models");
+db.sequelize
+  .sync()
+  .then(() => {
+    console.log("Drop and re-sync db.");
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
 
 // simple route
 app.get("/", (req, res) => {
